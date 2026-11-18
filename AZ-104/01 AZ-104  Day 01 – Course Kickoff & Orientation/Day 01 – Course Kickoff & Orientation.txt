@@ -1,0 +1,54 @@
+
+
+CapEx
+OpexEx
+
+SystemSLA Technologies Pvt. Ltd. - IT Supoort - Datacenter in Public - SLA 
+
+SLA
+- Response
+- Issue Resolving
+
+Priority	Response		Issue Resolving
+P1       - 5-10 Min + Call   	- 30-60 Min
+P2       - 10-15 Min			- 2-3 hrs.
+P3       - 15-30 Min			- 1 day - 2-3 days
+P4       - 30 Min			- Client Define time
+P5       - 30 Min			- Client Define time
+
+ASNETworkZONE - Training & Certification
+
+
+AZ - 900, 104, 305
+
+AVD
+
+Resource - 15 Servers
+- Servers
+- Network Device - Switch, Router, Firewall, NLB
+- Storage,
+
+
+
+
+
+IANA
+
+IP - Internet Protocol
+-  Local - Free
+-  Public - Pay - NAT
+
+
+
+
+
+
+
+internet - Intranet (Private Network) - Local
+Internet - Internet (Public Network) 
+
+
+
+
+
+

@@ -1,0 +1,44 @@
+# Credentials and local configuration
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.pfx
+*.p12
+.azure/
+
+# Terraform local state and downloaded providers
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+*.tfvars
+*.tfvars.json
+!*.tfvars.example
+
+# Private course materials: store these in this folder
+private-materials/
+
+# Temporary and editor files
+*.tmp
+*.swp
+*~
+.vscode/
+.idea/
+__pycache__/
+*.pyc
+
+# Operating system files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Videos
+*.mp4
+
+# Remove Large file
+# git rm --cached -- "VMware/VMware-Workstation-Full-25H2-24995812.exe"
+# Add-Content -Path .gitignore -Value "VMware/VMware-Workstation-Full-25H2-24995812.exe"VMware/VMware-Workstation-Full-25H2-24995812.exe
+# VMware installers
+VMware/VMware-Workstation-Full-25H2-24995812.exe

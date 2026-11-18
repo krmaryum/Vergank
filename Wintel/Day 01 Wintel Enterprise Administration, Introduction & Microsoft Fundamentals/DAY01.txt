@@ -1,0 +1,79 @@
+
+Resource
+
+
+
+Microsoft
+Open Soruce - Redhat | Ubuntu, CentOS
+
+Server - RIS / WDS 
+
+Wintel - Windows + Intel
+
+
+Windows Server - Physical Server | Virtual - AMD | INTEL
+
+
+HPE
+DELL
+Cisco
+IBM /  Lenovo
+
+
+SystemSLA Technologies Private Limited - IT Tech Support
+- Servers - ADDS, DNS, DHCP, Web Site, CA
+
+IBM Bank - US/UK - DataCenter - 1500 Servers -  DEL |  DR - HYD    - RTO/RPO
+- Physical Servers - 200 
+- Virtual Servers - 800
+- Cloud Servers - 500
+
+Network
+Security
+Backup
+Monitoring
+
+
+
+
+
+Prince2, PMP, ITIL, Agile
+
+
+
+
+Apple
+- DOS - CUI
+- MAC OS - GUI
+
+Microsoft
+- MS DOS - CUI / CLI
+
+Client OS
+- Windows 1.0 - GUI
+- Windows 2.0
+- Windows 3.0
+- Windows 95
+- Windows 98
+- Windows Me
+- Windows 2000 Pro
+- Windows XP
+- Windows Vista -
+- Windows 7
+- Windows 8
+- Windows 8.1
+- Windows 10
+- Windows 11 - Student, Home, Corporate
+
+Server OS
+- Windows Server N.T.
+- Windows Server 2000 Advan.
+- Windows Server 2003
+- Windows Server 2008
+- Windows Server 2012
+- Windows Server 2016
+- Windows Server 2019
+- Windows Server 2022
+- Windows Server 2025
+
+

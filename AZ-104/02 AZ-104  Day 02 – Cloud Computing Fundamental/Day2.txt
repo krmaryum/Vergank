@@ -1,0 +1,47 @@
+
+
+Why we required servers?
+DHCP
+DNS
+ADDS
+WS - IIS
+App
+
+
+DataCenter - Redundancy - Capex - 1 CR + Opex 20 Lakh
+- Colling
+- Power
+- Server 10 Lakhs
+- Network - 8 Lakhs
+
+Disaster Recovery Location - RTO( Recovery Time Objective) / RPO(Recovery Point Objective) - 1 hrs
+DHCP
+DNS
+ADDS
+WS - IIS
+App
+
+
+On prem WINTEL
+
+Cloud Computing - Pay as you go
+
+
+Type of Clouds
+- Private Cloud - IBM, TCS, Info Sys, 
+- Public Cloud - Amazon - AWS 2014  - Microsoft - Azure 2011 | - Google - GCP
+- Hybrid Cloud - Microsoft + AWS
+
+AWS - 28% - 31% 
+Azure - 20% - 25%
+GCP - 15%
+
+
+Important Links
+
+Azure Sign UP
+https://azure.microsoft.com/en-in/pricing/purchase-options/azure-account-c
+Azure Infrastructure
+https://datacenters.microsoft.com/globe/explore/
+Azure regions list
+https://learn.microsoft.com/en-us/azure/reliability/regions-list?tabs=all
