@@ -1,0 +1,30 @@
+
+
+Laptop | Desktop - OS (Windows 10/11) - VMware Workstation
+- CPU i5 - 4 Core
+- Memory - 16GB
+- Storage -  250GB (SCSI | SSD | NVME)
+- LAN
+
+
+- Client Users - End User - Windows 11
+- Server - 2019, 2022, 2025
+
+Deployment of Windows 
+Device - 1,2 - Usb Installer
+Bulk Installation - WDS (Windows Deployment Server) - Network - DNS + DHCP +ADDS
+Bulk Installation | Less Devices - Cloud - Azure - Intune - Network
+
+
+Installation of Windows
+- Text Mode 
+- Setup Mode - 
+- Network Mode - Workgroup | Domain
+- Final Mode -
+
+
+
+Clean Installation
+
+
+

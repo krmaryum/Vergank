@@ -1,0 +1,5 @@
+# Day 03 Part B — BIOS fundamentals and the Microsoft interview
+
+**Source:** B:52–90
+
+**Instructor / classroom discussion:** A student suggests that BIOS stores a program that loads the operating system. The instructor agrees that this is related but challenges the class to explain exactly how firmware participates in booting, rather than repeating an acronym. Another student describes BIOS as firmware stored in a chip; the instructor asks for a functional explanation. He explains that technical interviews often probe fundamental ideas even for experienced administrators. In his own Microsoft interview, the discussion reportedly lasted almost two hours and focused on TCP/IP rather than advanced Windows roles. The role was in Pune, but he preferred to stay closer to family in Noida or Gurgaon, so he declined the location offered. He uses this personal story to reinforce that fundamentals matter. Returning to BIOS/UEFI, he describes firmware configuration for CPU, memory, storage, clock and boot-device priority; he uses the term “mini OS” as a teaching analogy.
