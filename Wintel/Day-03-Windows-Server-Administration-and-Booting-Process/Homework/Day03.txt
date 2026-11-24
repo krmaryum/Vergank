@@ -1,0 +1,6 @@
+To-Do List
+- VMware Worstation
+- Windows Server 2019, 2022 & 2025 - Windows 11
+- Booting Process
+- File System
+- Workgroup Domain

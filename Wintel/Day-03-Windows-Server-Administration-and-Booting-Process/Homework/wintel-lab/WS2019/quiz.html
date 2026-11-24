@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Windows Server 2019 Install Quiz</title>
+<style>
+  :root {
+    --bg: #f6f7f9; --card: #ffffff; --text: #1d2330; --muted: #5b6475;
+    --border: #d9dde4; --accent: #2f5fd0; --good: #1f7a3d; --good-bg: #e6f4ea;
+    --bad: #b42318; --bad-bg: #fdecea;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #14171c; --card: #1d2128; --text: #e7e9ee; --muted: #a3aab8;
+      --border: #333a45; --accent: #7aa2ff; --good: #6fd08f; --good-bg: #17301f;
+      --bad: #ff8a80; --bad-bg: #3a1c1a;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+         background: var(--bg); color: var(--text); line-height: 1.5; }
+  main { max-width: 760px; margin: 0 auto; padding: 24px 16px 64px; }
+  h1 { font-size: 1.6rem; margin: 0 0 4px; }
+  .sub { color: var(--muted); margin: 0 0 20px; }
+  .bar { position: sticky; top: 0; z-index: 2; background: var(--bg); padding: 10px 0;
+         border-bottom: 1px solid var(--border); margin-bottom: 20px;
+         display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+  .score { font-weight: 600; }
+  .progress { flex: 1; min-width: 160px; height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; }
+  .progress > div { height: 100%; width: 0; background: var(--accent); transition: width .2s; }
+  button { font: inherit; cursor: pointer; }
+  .btn { background: var(--accent); color: #fff; border: 0; border-radius: 6px; padding: 8px 14px; }
+  .btn.secondary { background: transparent; color: var(--accent); border: 1px solid var(--accent); }
+  .q { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 18px; margin-bottom: 16px; }
+  .q h2 { font-size: 1.05rem; margin: 0 0 12px; }
+  .q .num { color: var(--muted); font-weight: 500; margin-right: 4px; }
+  .topic { display: inline-block; font-size: .75rem; color: var(--muted); border: 1px solid var(--border);
+           border-radius: 999px; padding: 1px 8px; margin-bottom: 8px; }
+  .opt { display: block; width: 100%; text-align: left; background: transparent; color: var(--text);
+         border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; margin: 6px 0; }
+  .opt:hover:not(:disabled) { border-color: var(--accent); }
+  .opt:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .opt:disabled { cursor: default; }
+  .opt.correct { border-color: var(--good); background: var(--good-bg); }
+  .opt.wrong { border-color: var(--bad); background: var(--bad-bg); }
+  .opt .mark { float: right; font-weight: 700; }
+  .explain { margin-top: 10px; padding: 10px 12px; border-left: 4px solid var(--border); background: var(--bg);
+             border-radius: 4px; display: none; }
+  .explain.show { display: block; }
+  .explain.good { border-left-color: var(--good); }
+  .explain.bad { border-left-color: var(--bad); }
+  .result { background: var(--card); border: 2px solid var(--accent); border-radius: 10px; padding: 20px;
+            margin: 24px 0; display: none; text-align: center; }
+  .result.show { display: block; }
+  .result .big { font-size: 2.2rem; font-weight: 700; margin: 4px 0; }
+  .result ul { text-align: left; display: inline-block; margin: 8px 0 16px; }
+  footer { color: var(--muted); font-size: .85rem; margin-top: 32px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Windows Server 2019 Install Quiz</h1>
+  <p class="sub">25 questions on installing Windows Server 2019 in VMware Workstation Pro. Click an answer to see if you are right and why. Works offline.</p>
+
+  <div class="bar">
+    <span class="score" id="score">Score: 0 / 0</span>
+    <div class="progress" aria-hidden="true"><div id="progress"></div></div>
+    <button class="btn secondary" id="restart" type="button">Restart (shuffle)</button>
+  </div>
+
+  <div id="quiz"></div>
+
+  <div class="result" id="result" role="status" aria-live="polite"></div>
+
+  <footer>Part of the Windows Server 2019 study bundle. See README.md for the full guide.</footer>
+</main>
+
+<script>
+/* ====================================================================
+   QUESTIONS
+   To make a quiz for another Windows version, edit only this list.
+   answer = the index of the correct option, counting from 0.
+   ==================================================================== */
+const QUESTIONS = [
+  {
+    topic: "Basics",
+    q: "In a virtualization lab, what is the 'host'?",
+    options: ["The operating system installed inside the VM", "The real, physical computer running the hypervisor", "The ISO file used to install Windows", "The router that gives out IP addresses"],
+    answer: 1,
+    explain: "The host is your real computer (in this lab, a Windows 10 PC). The OS inside the VM is called the guest."
+  },
+  {
+    topic: "Basics",
+    q: "VMware Workstation Pro is which type of hypervisor?",
+    options: ["Type 1 (bare-metal)", "Type 2 (hosted)", "Type 3 (cloud)", "It is not a hypervisor"],
+    answer: 1,
+    explain: "Workstation runs as an application on top of Windows, so it is Type 2 (hosted). ESXi and Hyper-V are Type 1: they run directly on the hardware."
+  },
+  {
+    topic: "Prerequisites",
+    q: "In Task Manager > Performance > CPU, which line must say 'Enabled' before you build VMs?",
+    options: ["Hyper-threading", "Virtualization", "L3 cache", "Sockets"],
+    answer: 1,
+    explain: "'Virtualization: Enabled' means Intel VT-x or AMD-V is turned on. Without it, VMs won't start or will be very slow. You enable it in the PC's own BIOS/UEFI setup."
+  },
+  {
+    topic: "VM creation",
+    q: "Why did we choose 'I will install the operating system later' in the wizard?",
+    options: ["Because the ISO was missing", "To skip VMware's Easy Install so we can see and learn every Windows Setup screen", "Because it makes the VM run faster", "Because Windows Server cannot be installed from an ISO"],
+    answer: 1,
+    explain: "If you give VMware the ISO at this point, it may run Easy Install and answer Setup questions for you. For learning, we attach the ISO later and do every step ourselves."
+  },
+  {
+    topic: "VM creation",
+    q: "Why should you NOT save your VM in the default OneDrive folder?",
+    options: ["OneDrive folders are read-only", "VMware can't open files from OneDrive", "Syncing huge, constantly changing VM files is slow and can corrupt the VM", "OneDrive deletes files after 30 days"],
+    answer: 2,
+    explain: "VM files are large and change all the time. Cloud syncing wastes bandwidth and can corrupt a running VM. Store VMs on a local drive with plenty of space, like D:\\VMs."
+  },
+  {
+    topic: "VM creation",
+    q: "What is the main benefit of 'Split virtual disk into multiple files'?",
+    options: ["The VM boots faster", "It is easier to copy, move and back up the VM", "It encrypts the disk", "It gives the VM more disk space"],
+    answer: 1,
+    explain: "Smaller files are easier to move and back up, for example to a FAT32 USB drive that can't hold files over 4 GB. A single file can be slightly faster with very large disks."
+  },
+  {
+    topic: "VM creation",
+    q: "You set an 80 GB virtual disk. How much space does it use on the host right after creation?",
+    options: ["Exactly 80 GB", "Only a small amount; it grows as data is written", "160 GB, because it is split", "Nothing until you take a snapshot"],
+    answer: 1,
+    explain: "By default the disk is thin (growable): it starts small and only grows as data is written, up to 80 GB."
+  },
+  {
+    topic: "Hardware",
+    q: "The host has 4 CPU cores and 16 GB RAM. Which VM setting is the most sensible?",
+    options: ["4 cores, 16 GB RAM", "2 cores, 4 GB RAM", "8 cores, 8 GB RAM", "1 core, 512 MB RAM"],
+    answer: 1,
+    explain: "You must leave enough for the host. 2 cores and 4 GB (as used in this lab) runs Server 2019 Desktop Experience smoothly and leaves half the CPU and 12 GB RAM for Windows 10."
+  },
+  {
+    topic: "Hardware",
+    q: "When do you need to tick 'Virtualize Intel VT-x/EPT or AMD-V/RVI' on the VM's processors?",
+    options: ["Always, or Windows won't install", "Only when you want to run VMs inside this VM (nested virtualization)", "Only on AMD processors", "Only when using Bridged networking"],
+    answer: 1,
+    explain: "This option passes virtualization through to the guest, so you can run a hypervisor (like Hyper-V) inside the VM. It is not needed for a normal install."
+  },
+  {
+    topic: "Networking",
+    q: "Which network mode makes the VM appear on your real network as a separate computer with its own IP address?",
+    options: ["NAT", "Host-only", "Bridged", "LAN segment"],
+    answer: 2,
+    explain: "Bridged connects the VM directly to the physical network, so it gets its own IP from the real router, like another PC."
+  },
+  {
+    topic: "Networking",
+    q: "With NAT networking, what is true?",
+    options: ["The VM shares the host's IP address and can reach the internet", "The VM has no network at all", "The VM can only talk to the host, never the internet", "The VM gets a public IP from your ISP"],
+    answer: 0,
+    explain: "NAT hides the VM behind the host's IP address. The VM can get out to the internet, but other devices on the network can't easily reach it. It is VMware's default."
+  },
+  {
+    topic: "Networking",
+    q: "Which mode would you choose for a fully isolated lab with no internet, where only the host and VMs talk?",
+    options: ["Bridged", "NAT", "Host-only", "Replicate physical network state"],
+    answer: 2,
+    explain: "Host-only creates a private network between the host and VMs only. Nothing goes out to the internet."
+  },
+  {
+    topic: "Firmware",
+    q: "On first power-on, the VM showed a blue UEFI Boot Manager instead of Windows Setup. What is the most likely cause?",
+    options: ["The ISO file is corrupt", "The 'Press any key to boot from CD or DVD' prompt was missed", "The VM needs more RAM", "Bridged networking is blocking the boot"],
+    answer: 1,
+    explain: "With UEFI, the Windows ISO waits only a few seconds for a key press. If the keyboard is still on the host, it times out and drops to the Boot Manager."
+  },
+  {
+    topic: "Firmware",
+    q: "Where did we change the firmware type from UEFI to BIOS?",
+    options: ["VM > Settings > Hardware > Memory", "VM > Settings > Options > Advanced", "Edit > Preferences > Workspace", "Inside Windows Setup"],
+    answer: 1,
+    explain: "VM > Settings > Options tab > Advanced > Firmware type. Do it only with the VM powered off and BEFORE installing the OS."
+  },
+  {
+    topic: "Firmware",
+    q: "Why should you only change the firmware type BEFORE installing the OS?",
+    options: ["VMware locks the setting after install", "Changing it later can make the installed OS unbootable", "It deletes the virtual disk", "It resets the Administrator password"],
+    answer: 1,
+    explain: "BIOS and UEFI boot in different ways (MBR vs GPT disks). Windows installed for one usually won't boot with the other."
+  },
+  {
+    topic: "Firmware",
+    q: "Which is a feature of UEFI but NOT of legacy BIOS?",
+    options: ["Booting from a DVD", "Secure Boot and support for disks larger than 2 TB", "Supporting a keyboard", "Running 32-bit programs"],
+    answer: 1,
+    explain: "UEFI uses GPT disks (far beyond 2 TB) and supports Secure Boot, which blocks untrusted boot software. Windows 11 requires UEFI."
+  },
+  {
+    topic: "Setup",
+    q: "What do you get if you choose 'Windows Server 2019 Datacenter' WITHOUT '(Desktop Experience)'?",
+    options: ["A trial that expires in 30 days", "Server Core: no desktop, managed by command line or remotely", "Windows 10 with server tools", "An error, because it needs a product key"],
+    answer: 1,
+    explain: "The option without brackets installs Server Core. It is smaller and more secure but has no Start menu or File Explorer. Beginners should choose Desktop Experience."
+  },
+  {
+    topic: "Setup",
+    q: "What is the main licensing difference between Standard and Datacenter?",
+    options: ["Datacenter has no desktop", "Standard allows 2 Windows Server VMs; Datacenter allows unlimited VMs", "Standard is free", "Datacenter can't be installed in VMware"],
+    answer: 1,
+    explain: "Both share the same core features, but Datacenter gives unlimited virtualization rights and extra features like Storage Spaces Direct and Shielded VMs."
+  },
+  {
+    topic: "Setup",
+    q: "For a brand-new VM with an empty disk, which installation type do you choose?",
+    options: ["Upgrade", "Custom: Install Windows only (advanced)", "Repair your computer", "Network install"],
+    answer: 1,
+    explain: "Upgrade is only for updating an existing Windows. A new, empty disk needs a Custom (clean) installation."
+  },
+  {
+    topic: "Setup",
+    q: "On 'Where do you want to install Windows?', you see 'Drive 0 Unallocated Space'. What should you do?",
+    options: ["Click Format first, then New, then Next", "Select it and click Next; Setup creates the partitions itself", "Click Load driver", "Go back and choose Upgrade"],
+    answer: 1,
+    explain: "Unallocated means empty. Setup automatically creates and formats the partitions it needs when you click Next."
+  },
+  {
+    topic: "Setup",
+    q: "What happens if you click 'Do this later' on the product key screen with the evaluation ISO?",
+    options: ["Setup stops", "Windows Server runs as a full 180-day evaluation", "You get Server Core only", "Windows works for 7 days only"],
+    answer: 1,
+    explain: "The evaluation version is the full product for 180 days without a key. Perfect for a lab."
+  },
+  {
+    topic: "Setup",
+    q: "Which password would Windows Server accept for the Administrator account by default?",
+    options: ["password", "Admin", "12345678", "Lab#Srv19x"],
+    answer: 3,
+    explain: "The default policy needs at least 8 characters from 3 of 4 groups (upper case, lower case, numbers, symbols). Only 'Lab#Srv19x' meets that. (Never put a real password in GitHub!)"
+  },
+  {
+    topic: "Using the VM",
+    q: "How do you send Ctrl+Alt+Del to a VM in VMware Workstation?",
+    options: ["Ctrl+Alt+Del", "Ctrl+Alt+Insert", "Ctrl+Alt+End", "Ctrl+Shift+Esc"],
+    answer: 1,
+    explain: "The host always captures Ctrl+Alt+Del. VMware uses Ctrl+Alt+Insert (or VM > Send Ctrl+Alt+Del). Ctrl+Alt+End is the Hyper-V equivalent."
+  },
+  {
+    topic: "Using the VM",
+    q: "Your mouse is stuck inside the VM window. Which keys release it?",
+    options: ["Esc", "Ctrl+Alt", "Alt+F4", "Ctrl+G"],
+    answer: 1,
+    explain: "Ctrl+Alt releases the mouse and keyboard back to the host. Ctrl+G does the opposite: it sends input into the VM. VMware Tools fixes this for good."
+  },
+  {
+    topic: "After install",
+    q: "The VM shows 3:47 PM but the host shows 5:47 PM. Why does correct time matter so much on a server?",
+    options: ["Windows Update only works at night", "Kerberos logins in Active Directory fail if clocks differ by more than 5 minutes", "VMware Tools won't install", "The evaluation period counts down faster"],
+    answer: 1,
+    explain: "Server 2019 defaults to Pacific Time. In a domain, Kerberos rejects logins when clocks are more than 5 minutes apart, so set the right time zone straight away. Also pick 'Central Time (US & Canada)', not 'Central America', if you need daylight saving."
+  }
+];
+/* ==================================================================== */
+
+const quizEl = document.getElementById("quiz");
+const scoreEl = document.getElementById("score");
+const progressEl = document.getElementById("progress");
+const resultEl = document.getElementById("result");
+let order = [], answered = 0, correct = 0, missed = [];
+
+function shuffle(a) {
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function el(tag, cls, text) {
+  const e = document.createElement(tag);
+  if (cls) e.className = cls;
+  if (text !== undefined) e.textContent = text;
+  return e;
+}
+
+function updateBar() {
+  scoreEl.textContent = "Score: " + correct + " / " + answered + "  (of " + QUESTIONS.length + ")";
+  progressEl.style.width = (answered / QUESTIONS.length * 100) + "%";
+}
+
+function showResult() {
+  const pct = Math.round(correct / QUESTIONS.length * 100);
+  let msg = "Keep practicing. Re-read the README and try again.";
+  if (pct >= 90) msg = "Excellent! You really understand this lab.";
+  else if (pct >= 80) msg = "Great job! You are ready for the next lab.";
+  else if (pct >= 60) msg = "Good start. Review the questions you missed.";
+  resultEl.textContent = "";
+  resultEl.appendChild(el("div", null, "Your score"));
+  resultEl.appendChild(el("div", "big", correct + " / " + QUESTIONS.length + " (" + pct + "%)"));
+  resultEl.appendChild(el("p", null, msg));
+  if (missed.length) {
+    resultEl.appendChild(el("p", null, "Questions to review:"));
+    const ul = el("ul");
+    missed.sort((a, b) => a.n - b.n).forEach(m => ul.appendChild(el("li", null, "Q" + m.n + ": " + m.q)));
+    resultEl.appendChild(ul);
+  }
+  const again = el("button", "btn", "Try again");
+  again.type = "button";
+  again.onclick = start;
+  resultEl.appendChild(document.createElement("br"));
+  resultEl.appendChild(again);
+  resultEl.classList.add("show");
+  resultEl.scrollIntoView({ behavior: "smooth", block: "center" });
+}
+
+function choose(card, item, n, idx) {
+  const buttons = card.querySelectorAll(".opt");
+  buttons.forEach(b => b.disabled = true);
+  const isRight = idx === item.answer;
+  buttons[item.answer].classList.add("correct");
+  buttons[item.answer].appendChild(el("span", "mark", "\u2713"));
+  if (!isRight) {
+    buttons[idx].classList.add("wrong");
+    buttons[idx].appendChild(el("span", "mark", "\u2717"));
+    missed.push({ n: n, q: item.q });
+  } else {
+    correct++;
+  }
+  answered++;
+  const ex = card.querySelector(".explain");
+  ex.textContent = "";
+  ex.appendChild(el("strong", null, isRight ? "Correct! " : "Not quite. "));
+  ex.appendChild(document.createTextNode(item.explain));
+  ex.classList.add("show", isRight ? "good" : "bad");
+  updateBar();
+  if (answered === QUESTIONS.length) showResult();
+}
+
+function start() {
+  order = shuffle(QUESTIONS.map((_, i) => i));
+  answered = 0; correct = 0; missed = [];
+  quizEl.textContent = "";
+  resultEl.classList.remove("show");
+  order.forEach((qi, pos) => {
+    // Shuffle the answer options too, so the correct letter changes each time.
+    const src = QUESTIONS[qi], n = pos + 1;
+    const optOrder = shuffle(src.options.map((_, i) => i));
+    const item = Object.assign({}, src, {
+      options: optOrder.map(i => src.options[i]),
+      answer: optOrder.indexOf(src.answer)
+    });
+    const card = el("section", "q");
+    card.appendChild(el("span", "topic", item.topic));
+    const h = el("h2");
+    h.appendChild(el("span", "num", n + "."));
+    h.appendChild(document.createTextNode(item.q));
+    card.appendChild(h);
+    item.options.forEach((text, idx) => {
+      const b = el("button", "opt", String.fromCharCode(65 + idx) + ". " + text);
+      b.type = "button";
+      b.onclick = () => choose(card, item, n, idx);
+      card.appendChild(b);
+    });
+    card.appendChild(el("div", "explain"));
+    quizEl.appendChild(card);
+  });
+  updateBar();
+  window.scrollTo(0, 0);
+}
+
+document.getElementById("restart").onclick = start;
+start();
+</script>
+</body>
+</html>
