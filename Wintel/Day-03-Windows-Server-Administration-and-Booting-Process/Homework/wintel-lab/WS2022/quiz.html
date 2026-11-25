@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Windows Server 2022 Install Quiz</title>
+<style>
+  :root {
+    --bg: #f6f7f9; --card: #ffffff; --text: #1d2330; --muted: #5b6475;
+    --border: #d9dde4; --accent: #2f5fd0; --good: #1f7a3d; --good-bg: #e6f4ea;
+    --bad: #b42318; --bad-bg: #fdecea;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #14171c; --card: #1d2128; --text: #e7e9ee; --muted: #a3aab8;
+      --border: #333a45; --accent: #7aa2ff; --good: #6fd08f; --good-bg: #17301f;
+      --bad: #ff8a80; --bad-bg: #3a1c1a;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+         background: var(--bg); color: var(--text); line-height: 1.5; }
+  main { max-width: 760px; margin: 0 auto; padding: 24px 16px 64px; }
+  h1 { font-size: 1.6rem; margin: 0 0 4px; }
+  .sub { color: var(--muted); margin: 0 0 20px; }
+  .bar { position: sticky; top: 0; z-index: 2; background: var(--bg); padding: 10px 0;
+         border-bottom: 1px solid var(--border); margin-bottom: 20px;
+         display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+  .score { font-weight: 600; }
+  .progress { flex: 1; min-width: 160px; height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; }
+  .progress > div { height: 100%; width: 0; background: var(--accent); transition: width .2s; }
+  button { font: inherit; cursor: pointer; }
+  .btn { background: var(--accent); color: #fff; border: 0; border-radius: 6px; padding: 8px 14px; }
+  .btn.secondary { background: transparent; color: var(--accent); border: 1px solid var(--accent); }
+  .q { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 18px; margin-bottom: 16px; }
+  .q h2 { font-size: 1.05rem; margin: 0 0 12px; }
+  .q .num { color: var(--muted); font-weight: 500; margin-right: 4px; }
+  .topic { display: inline-block; font-size: .75rem; color: var(--muted); border: 1px solid var(--border);
+           border-radius: 999px; padding: 1px 8px; margin-bottom: 8px; }
+  .opt { display: block; width: 100%; text-align: left; background: transparent; color: var(--text);
+         border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; margin: 6px 0; }
+  .opt:hover:not(:disabled) { border-color: var(--accent); }
+  .opt:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .opt:disabled { cursor: default; }
+  .opt.correct { border-color: var(--good); background: var(--good-bg); }
+  .opt.wrong { border-color: var(--bad); background: var(--bad-bg); }
+  .opt .mark { float: right; font-weight: 700; }
+  .explain { margin-top: 10px; padding: 10px 12px; border-left: 4px solid var(--border); background: var(--bg);
+             border-radius: 4px; display: none; }
+  .explain.show { display: block; }
+  .explain.good { border-left-color: var(--good); }
+  .explain.bad { border-left-color: var(--bad); }
+  .result { background: var(--card); border: 2px solid var(--accent); border-radius: 10px; padding: 20px;
+            margin: 24px 0; display: none; text-align: center; }
+  .result.show { display: block; }
+  .result .big { font-size: 2.2rem; font-weight: 700; margin: 4px 0; }
+  .result ul { text-align: left; display: inline-block; margin: 8px 0 16px; }
+  footer { color: var(--muted); font-size: .85rem; margin-top: 32px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Windows Server 2022 Install Quiz</h1>
+  <p class="sub">25 questions on installing Windows Server 2022 in VMware Workstation Pro. Click an answer to see if you are right and why. Works offline.</p>
+
+  <div class="bar">
+    <span class="score" id="score">Score: 0 / 0</span>
+    <div class="progress" aria-hidden="true"><div id="progress"></div></div>
+    <button class="btn secondary" id="restart" type="button">Restart (shuffle)</button>
+  </div>
+
+  <div id="quiz"></div>
+
+  <div class="result" id="result" role="status" aria-live="polite"></div>
+
+  <footer>Part of the Windows Server 2022 study bundle. See README.md for the full guide.</footer>
+</main>
+
+<script>
+/* ====================================================================
+   QUESTIONS
+   To make a quiz for another Windows version, edit only this list.
+   answer = the index of the correct option, counting from 0.
+   ==================================================================== */
+const QUESTIONS = [
+  { topic: "Basics", q: "When was Windows Server 2022 released?", options: ["2018", "August 2021", "2023", "2025"], answer: 1,
+    explain: "Server 2022 was released in August 2021 (build 20348). It is an LTSC release with extended support until October 2031." },
+  { topic: "Basics", q: "Which edition allows UNLIMITED Windows Server VMs on one licensed host?", options: ["Standard", "Essentials", "Datacenter", "Server Core"], answer: 2,
+    explain: "Datacenter allows unlimited Windows Server VMs. Standard allows 2. Server Core is an install option, not an edition." },
+  { topic: "Basics", q: "Which of these is NEW in Windows Server 2022?", options: ["Server Manager", "TLS 1.3 turned on by default", "Active Directory", "NTFS file system"], answer: 1,
+    explain: "TLS 1.3 by default, Secured-core server, DNS over HTTPS and SMB AES-256 are new in 2022. The others have existed for many years." },
+  { topic: "Basics", q: "Which web browser comes built in with Windows Server 2022?", options: ["Internet Explorer only", "Google Chrome", "Microsoft Edge", "No browser at all"], answer: 2,
+    explain: "Server 2022 includes Microsoft Edge (you can see it in the taskbar in Step 20). Server 2019 used Internet Explorer." },
+  { topic: "Basics", q: "What do you get if you choose 'Windows Server 2022 Standard' WITHOUT '(Desktop Experience)'?", options: ["The full desktop", "Server Core: command line only, no desktop", "A 30-day trial", "Windows 11"], answer: 1,
+    explain: "Without '(Desktop Experience)' you get Server Core. It is smaller and more secure but has no Start menu or File Explorer." },
+  { topic: "Basics", q: "The edition names in Setup do NOT contain the word 'Evaluation'. What does that tell you?", options: ["The ISO is damaged", "It is a regular ISO that needs a product key to activate", "It is Windows 10", "It will stop working after 1 day"], answer: 1,
+    explain: "Evaluation ISOs show 'Evaluation' in the edition name and run 180 days without a key. A regular ISO installs fine but stays not activated without a key." },
+  { topic: "Basics", q: "What is the minimum RAM for Windows Server 2022 with Desktop Experience?", options: ["512 MB", "2 GB", "8 GB", "16 GB"], answer: 1,
+    explain: "512 MB is the minimum for Server Core; Desktop Experience needs 2 GB. In practice give it more, like the ~4 GB used in this lab." },
+  { topic: "VM setup", q: "Why choose 'I will install the operating system later' in the wizard?", options: ["It makes the VM faster", "It stops VMware's Easy Install, so you see every Setup screen yourself", "It is the only way to use an ISO", "It skips the license"], answer: 1,
+    explain: "Easy Install answers Setup for you. In a lab you want to learn each screen, so you attach the ISO later in Customize Hardware." },
+  { topic: "VM setup", q: "Why store the VM in D:\\VMs\\WinSRV-2022 instead of the default location?", options: ["The default is inside OneDrive on C:, which can corrupt VMs and has less space", "VMware only works on D:", "D: is faster for every PC", "Windows Server can't be on C:"], answer: 0,
+    explain: "The default location is in OneDrive-synced Documents. Syncing huge VM files is slow and risky. D: also has much more free space." },
+  { topic: "VM setup", q: "What does 'Split virtual disk into multiple files' do?", options: ["Makes two separate disks", "Stores the disk as many smaller files that are easier to copy and back up", "Encrypts the disk", "Makes the disk smaller than 80 GB"], answer: 1,
+    explain: "Splitting stores one virtual disk as many smaller files. They are easier to move and back up, e.g. to FAT32 USB sticks with a 4 GB file limit." },
+  { topic: "VM setup", q: "Which network mode gives the VM its own IP address on your real network, like another PC?", options: ["NAT", "Host-only", "Bridged", "Offline"], answer: 2,
+    explain: "Bridged connects the VM straight to the physical network. NAT hides it behind the host's IP. Host-only has no outside network." },
+  { topic: "VM setup", q: "VMware chose an NVMe virtual disk for Server 2022. What do you need to do in Setup?", options: ["Click 'Load driver' and find an NVMe driver", "Nothing: Server 2022 has the NVMe driver built in", "Change it to IDE", "Format it in VMware first"], answer: 1,
+    explain: "Server 2022 knows NVMe disks, so 'Drive 0 Unallocated Space' appears straight away." },
+  { topic: "Firmware", q: "What firmware type does VMware use by default for a new Server 2022 VM?", options: ["BIOS", "UEFI", "DOS", "None"], answer: 1,
+    explain: "The Options > Advanced screen (Step 09) shows UEFI selected by default. We changed it to BIOS." },
+  { topic: "Firmware", q: "When is it safe to change the firmware from UEFI to BIOS?", options: ["Any time", "Only BEFORE Windows is installed", "Only after VMware Tools is installed", "Never"], answer: 1,
+    explain: "BIOS and UEFI use different disk layouts (MBR vs GPT). Changing after installing can make Windows unbootable, as the warning says." },
+  { topic: "Firmware", q: "What problem did switching to BIOS before first boot prevent?", options: ["A blue screen error", "Landing on the UEFI Boot Manager because the 'Press any key' prompt was missed", "Losing the network", "A wrong time zone"], answer: 1,
+    explain: "With UEFI the ISO waits only ~5 seconds for a key press. In the 2019 lab it was missed and the VM fell to the Boot Manager." },
+  { topic: "Install", q: "On the 'Which type of installation' screen, which option do you choose for a new server?", options: ["Upgrade", "Custom", "Repair", "Reset"], answer: 1,
+    explain: "Upgrade is for updating an existing Windows. Our disk is empty, so we do a clean Custom install." },
+  { topic: "Install", q: "What does 'Drive 0 Unallocated Space 80.0 GB' mean?", options: ["The disk is broken", "The disk is empty with no partitions; Setup will create them", "The disk is full", "The ISO is on Drive 0"], answer: 1,
+    explain: "Unallocated = no partitions yet. Select it, click Next, and Setup creates and formats the partitions itself." },
+  { topic: "Install", q: "After Setup restarts the VM, you see 'Press any key to boot from CD or DVD'. What should you do?", options: ["Press a key quickly", "Nothing, let it boot from the disk", "Power off the VM", "Remove the ISO immediately"], answer: 1,
+    explain: "Pressing a key would boot the ISO again and restart Setup from the beginning." },
+  { topic: "Install", q: "Which password would Windows Server accept for Administrator?", options: ["password", "12345678", "Lab@2022x", "admin"], answer: 2,
+    explain: "It needs at least 8 characters from 3 of 4 groups: upper case, lower case, numbers, symbols. 'Lab@2022x' has all four." },
+  { topic: "After install", q: "Which keys send Ctrl+Alt+Del to a VMware VM?", options: ["Ctrl + Alt + Del", "Ctrl + Alt + Insert", "Ctrl + G", "Alt + F4"], answer: 1,
+    explain: "The host always catches Ctrl+Alt+Del, so VMware uses Ctrl+Alt+Insert (or VM > Send Ctrl+Alt+Del)." },
+  { topic: "After install", q: "What does clicking 'I Finished Installing' on VMware's yellow bar do?", options: ["Deletes the ISO file", "Tells VMware the OS install is done and removes the reminder bar", "Activates Windows", "Installs VMware Tools"], answer: 1,
+    explain: "It is only a reminder shown because we chose to install the OS later. It doesn't change the VM." },
+  { topic: "After install", q: "After first login the server screen is small and the mouse is clumsy. What fixes it?", options: ["Reinstall Windows", "Install VMware Tools", "Change to NAT", "Add more RAM"], answer: 1,
+    explain: "VMware Tools adds the display and mouse drivers. After installing it, the screen filled the whole window (Step 22)." },
+  { topic: "After install", q: "Server Manager shows a red number next to 'Services'. What does it mean?", options: ["The server has a virus", "Some Automatic services are not running right now; check which ones", "Windows is not activated", "The disk is full"], answer: 1,
+    explain: "It counts Automatic services that are stopped. On a fresh install this is often harmless (delayed or trigger-start services). Look before changing anything." },
+  { topic: "After install", q: "Which time zone should a server in Texas use?", options: ["(UTC-08:00) Pacific Time", "(UTC-06:00) Central America", "(UTC-06:00) Central Time (US & Canada)", "(UTC+00:00) UTC"], answer: 2,
+    explain: "Central Time (US & Canada) follows daylight saving. 'Central America' does not, so the clock would be 1 hour wrong for half the year." },
+  { topic: "After install", q: "In Active Directory, why must server clocks be correct?", options: ["For nice-looking logs only", "Kerberos logins fail if clocks differ by more than 5 minutes", "Windows Update needs it", "VMware Tools needs it"], answer: 1,
+    explain: "Kerberos rejects tickets when clocks are more than 5 minutes apart, so users can't log in." }
+];
+/* ==================================================================== */
+
+const quizEl = document.getElementById("quiz");
+const scoreEl = document.getElementById("score");
+const progressEl = document.getElementById("progress");
+const resultEl = document.getElementById("result");
+let order = [], answered = 0, correct = 0, missed = [];
+
+function shuffle(a) {
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function el(tag, cls, text) {
+  const e = document.createElement(tag);
+  if (cls) e.className = cls;
+  if (text !== undefined) e.textContent = text;
+  return e;
+}
+
+function updateBar() {
+  scoreEl.textContent = "Score: " + correct + " / " + answered + "  (of " + QUESTIONS.length + ")";
+  progressEl.style.width = (answered / QUESTIONS.length * 100) + "%";
+}
+
+function showResult() {
+  const pct = Math.round(correct / QUESTIONS.length * 100);
+  let msg = "Keep practicing. Re-read the README and try again.";
+  if (pct >= 90) msg = "Excellent! You really understand this lab.";
+  else if (pct >= 80) msg = "Great job! You are ready for the next lab.";
+  else if (pct >= 60) msg = "Good start. Review the questions you missed.";
+  resultEl.textContent = "";
+  resultEl.appendChild(el("div", null, "Your score"));
+  resultEl.appendChild(el("div", "big", correct + " / " + QUESTIONS.length + " (" + pct + "%)"));
+  resultEl.appendChild(el("p", null, msg));
+  if (missed.length) {
+    resultEl.appendChild(el("p", null, "Questions to review:"));
+    const ul = el("ul");
+    missed.sort((a, b) => a.n - b.n).forEach(m => ul.appendChild(el("li", null, "Q" + m.n + ": " + m.q)));
+    resultEl.appendChild(ul);
+  }
+  const again = el("button", "btn", "Try again");
+  again.type = "button";
+  again.onclick = start;
+  resultEl.appendChild(document.createElement("br"));
+  resultEl.appendChild(again);
+  resultEl.classList.add("show");
+  resultEl.scrollIntoView({ behavior: "smooth", block: "center" });
+}
+
+function choose(card, item, n, idx) {
+  const buttons = card.querySelectorAll(".opt");
+  buttons.forEach(b => b.disabled = true);
+  const isRight = idx === item.answer;
+  buttons[item.answer].classList.add("correct");
+  buttons[item.answer].appendChild(el("span", "mark", "\u2713"));
+  if (!isRight) {
+    buttons[idx].classList.add("wrong");
+    buttons[idx].appendChild(el("span", "mark", "\u2717"));
+    missed.push({ n: n, q: item.q });
+  } else {
+    correct++;
+  }
+  answered++;
+  const ex = card.querySelector(".explain");
+  ex.textContent = "";
+  ex.appendChild(el("strong", null, isRight ? "Correct! " : "Not quite. "));
+  ex.appendChild(document.createTextNode(item.explain));
+  ex.classList.add("show", isRight ? "good" : "bad");
+  updateBar();
+  if (answered === QUESTIONS.length) showResult();
+}
+
+function start() {
+  order = shuffle(QUESTIONS.map((_, i) => i));
+  answered = 0; correct = 0; missed = [];
+  quizEl.textContent = "";
+  resultEl.classList.remove("show");
+  order.forEach((qi, pos) => {
+    // Shuffle the answer options too, so the correct letter changes each time.
+    const src = QUESTIONS[qi], n = pos + 1;
+    const optOrder = shuffle(src.options.map((_, i) => i));
+    const item = Object.assign({}, src, {
+      options: optOrder.map(i => src.options[i]),
+      answer: optOrder.indexOf(src.answer)
+    });
+    const card = el("section", "q");
+    card.appendChild(el("span", "topic", item.topic));
+    const h = el("h2");
+    h.appendChild(el("span", "num", n + "."));
+    h.appendChild(document.createTextNode(item.q));
+    card.appendChild(h);
+    item.options.forEach((text, idx) => {
+      const b = el("button", "opt", String.fromCharCode(65 + idx) + ". " + text);
+      b.type = "button";
+      b.onclick = () => choose(card, item, n, idx);
+      card.appendChild(b);
+    });
+    card.appendChild(el("div", "explain"));
+    quizEl.appendChild(card);
+  });
+  updateBar();
+  window.scrollTo(0, 0);
+}
+
+document.getElementById("restart").onclick = start;
+start();
+</script>
+</body>
+</html>

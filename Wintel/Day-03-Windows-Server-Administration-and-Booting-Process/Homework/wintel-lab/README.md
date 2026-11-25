@@ -16,13 +16,13 @@ Every bundle has the same parts, in **English and Roman Urdu**:
 | Bundle | Status | Guide | Troubleshooting | Interview Q&A | Quiz |
 |--------|--------|-------|-----------------|---------------|------|
 | **Windows Server 2019** | ✅ Done | [English](WS2019/README.md) · [Roman Urdu](WS2019/README.roman-urdu.md) | [English](WS2019/TROUBLESHOOTING.md) · [Roman Urdu](WS2019/TROUBLESHOOTING.roman-urdu.md) | [English](WS2019/INTERVIEW-QA.md) · [Roman Urdu](WS2019/INTERVIEW-QA.roman-urdu.md) | [quiz.html](WS2019/quiz.html) |
-| Windows Server 2022 | 🔜 Coming | | | | |
+| **Windows Server 2022** | ✅ Done | [English](WS2022/README.md) · [Roman Urdu](WS2022/README.roman-urdu.md) | [English](WS2022/TROUBLESHOOTING.md) · [Roman Urdu](WS2022/TROUBLESHOOTING.roman-urdu.md) | [English](WS2022/INTERVIEW-QA.md) · [Roman Urdu](WS2022/INTERVIEW-QA.roman-urdu.md) | [quiz.html](WS2022/quiz.html) |
 | Windows Server 2025 | 🔜 Coming | | | | |
 | Windows 11 | 🔜 Coming | | | | |
 
 ## Where to start
 
-New to virtual machines? Start with **[Windows Server 2019](WS2019/README.md)**. It explains every term from the beginning.
+New to virtual machines? Start with **[Windows Server 2019](WS2019/README.md)**. It explains every term from the beginning. Then do **[Windows Server 2022](WS2022/README.md)**, which shows what changes and how the 2019 lessons prevent problems.
 
 ## Lab environment
 
@@ -42,7 +42,7 @@ wintel-lab/
 │   ├── INTERVIEW-QA.md / INTERVIEW-QA.roman-urdu.md
 │   ├── quiz.html
 │   └── images/
-├── WS2022/                 (coming)
+├── WS2022/                 (done, same files as WS2019)
 ├── WS2025/                 (coming)
 └── Win11/                  (coming)
 ```

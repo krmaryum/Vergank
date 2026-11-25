@@ -16,13 +16,13 @@ Har bundle ke hisse ek jaise hain, **English aur Roman Urdu** dono mein:
 | Bundle | Status | Guide | Troubleshooting | Interview Q&A | Quiz |
 |--------|--------|-------|-----------------|---------------|------|
 | **Windows Server 2019** | ✅ Mukammal | [English](WS2019/README.md) · [Roman Urdu](WS2019/README.roman-urdu.md) | [English](WS2019/TROUBLESHOOTING.md) · [Roman Urdu](WS2019/TROUBLESHOOTING.roman-urdu.md) | [English](WS2019/INTERVIEW-QA.md) · [Roman Urdu](WS2019/INTERVIEW-QA.roman-urdu.md) | [quiz.html](WS2019/quiz.html) |
-| Windows Server 2022 | 🔜 Jald aa raha hai | | | | |
+| **Windows Server 2022** | ✅ Mukammal | [English](WS2022/README.md) · [Roman Urdu](WS2022/README.roman-urdu.md) | [English](WS2022/TROUBLESHOOTING.md) · [Roman Urdu](WS2022/TROUBLESHOOTING.roman-urdu.md) | [English](WS2022/INTERVIEW-QA.md) · [Roman Urdu](WS2022/INTERVIEW-QA.roman-urdu.md) | [quiz.html](WS2022/quiz.html) |
 | Windows Server 2025 | 🔜 Jald aa raha hai | | | | |
 | Windows 11 | 🔜 Jald aa raha hai | | | | |
 
 ## Kahan se shuru karein
 
-Virtual machines mein naye hain? **[Windows Server 2019](WS2019/README.roman-urdu.md)** se shuru karein. Yeh har lafz shuru se samjhata hai.
+Virtual machines mein naye hain? **[Windows Server 2019](WS2019/README.roman-urdu.md)** se shuru karein. Yeh har lafz shuru se samjhata hai. Phir **[Windows Server 2022](WS2022/README.roman-urdu.md)** karein, jo batata hai ke kya badla aur 2019 ke sabaq masle kaise rokte hain.
 
 ## Lab environment
 
